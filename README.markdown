@@ -1,4 +1,4 @@
-# holman does dotfiles
+# khirakawa's dotfiles (forked from holman's dotfiles.)
 
 ## dotfiles
 
