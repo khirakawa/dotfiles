@@ -1,0 +1,9 @@
+target=10.86.135.205
+
+if [ $# -eq 1 ]; then
+    target=$1
+fi
+
+echo "ssh'ing to $target"
+
+ssh -p 2014 boston@$target
