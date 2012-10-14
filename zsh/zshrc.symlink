@@ -22,3 +22,4 @@ compinit
 for config_file ($ZSH/**/completion.zsh) source $config_file
 
 PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
+unsetopt nomatch
