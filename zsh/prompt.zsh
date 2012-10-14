@@ -22,9 +22,13 @@ git_dirty() {
 }
 
 git_prompt_info () {
- ref=$(/usr/bin/git symbolic-ref HEAD 2>/dev/null) || return
-# echo "(%{\e[0;33m%}${ref#refs/heads/}%{\e[0m%})"
- echo "${ref#refs/heads/}"
+  ref=$(/usr/bin/git symbolic-ref HEAD 2>/dev/null)
+  if [[ $ref == "" ]]
+  then
+    ref=$(/usr/bin/git log --pretty=format:'%h' -n 1)
+  fi
+  # echo "(%{\e[0;33m%}${ref#refs/heads/}%{\e[0m%})"
+  echo "${ref#refs/heads/}"
 }
 
 unpushed () {
