@@ -1,0 +1,12 @@
+source cc_variables
+rcleartool co -ser $CC_SERVER -username $CC_USERNAME -nc -use $@
+if [ $? -ne 0 ]
+then
+	echo "Error checking out files... Uncheck files now"
+	unco $@
+	if [ $? -ne 0 ]
+	then
+		echo "Error unchecking files...Uh-oh"
+	fi
+	exit 1
+fi

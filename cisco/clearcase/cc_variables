@@ -1,0 +1,3 @@
+export CC_SERVER="http://bxb-ccbu-rgy:12081/TeamWeb/services/Team"
+export CC_USERNAME="khirakaw"
+export CC_PASSWORD="mr3souda" #This is a temp password

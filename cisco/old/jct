@@ -1,0 +1,194 @@
+#!/bin/bash
+
+WORKSPACE="/ws/$USER-bxb"
+
+#MVN="mvn -T 1.0C"
+MVN="mvn"
+
+
+fail () {
+    jct clean
+    echo ""
+    echo $1
+    fin
+    exit 1
+}
+
+if [ "$1" = "co" ] ; then
+    shift
+    cleartool co -unr "$@"
+elif [ "$1" = "ci" ] ; then
+    shift
+    cleartool ci -nc "$@"
+elif [ "$1" = "merge" ] ; then
+    echo "This will merge the directory contents of two version of a directory."
+    echo "The directory must be checked out.  Replace . with the name if you aren't in it."
+    echo ct merge -to . -version /main/samba-bxb-proto/version_with_my_file /main/samba-bxb-proto/version_after_deleted
+elif [ "$1" = "update" ] ; then
+    if pseg eclipse > /dev/null 2>&1 ; then
+	echo "Weird things happen when eclipse is running during an update"
+	echo "quit eclipse and try again."
+	exit 1
+	fin
+    fi
+
+    export HOSTNAME=${HOSTNAME%%.*}
+
+    if which rcleartool > /dev/null 2>&1 ; then
+	CCRC=1
+	stty -echo
+	read -p "Password: " passw; echo
+	stty echo
+    fi
+    
+    # load aliases and functions
+    . ~/.bashrc
+
+    if [ "$2" = "all" ] ; then
+	common || fail "can't switch to common project"
+	if [ $CCRC ] ; then
+	    ct update -pas $passw || fail "Failed updating common"
+	fi
+	cd BuildDir || fail "Couldn't cd into BuildDir"
+	${MVN} -f parent-pom.xml install || fail "Failed to build parent pom"
+	cd ..
+	${MVN} -DskipTests clean install || fail "Failed to build common"
+	jct clean
+    fi
+
+    # now do ccp
+    ccp || fail "can't switch to ccp project"
+
+    if [ $CCRC ] ; then
+	ct update -pas $passw || fail "Failed updating common"
+    fi
+
+    cd BuildDir || fail "Couldn't cd into BuildDir"
+    ${MVN} -f parent-pom.xml install || fail "Failed to build parent pom"
+    cd ..
+    ${MVN} -DskipTests clean install || fail "Failed to build CCP"
+    jct clean
+    fin
+    echo "Common and CCP projects updated and built"
+    
+elif [ "$1" = "lsco" ] ; then
+    shift
+    VIEW_DIR="$JJR_ENG/views"
+    cd $VIEW_DIR
+
+    function lsco
+    {
+	
+	if [ -d $1 ] && cd $1 2>/dev/null ; then
+	    echo "Listing checkouts for `basename $1` view"
+	    cleartool lsco -avob -cview -sh
+	    echo "No more checkouts for `basename $1` view"
+	    echo ""
+	    cd $VIEW_DIR
+	else
+	    echo "Unknown view '$1'."
+	    echo "Try $0 ? for a list of known views"
+	fi
+    }
+
+    if [ "$#" != "0" ] ; then
+	if [ "$1" = "?" ] ; then
+	    echo "Available views:"
+	    ls -1 $VIEW_DIR
+	else
+	    for VIEW in "$@" ; do
+		lsco $VIEW
+	    done
+	fi
+    else 
+	for VIEW in $VIEW_DIR/* ; do
+	    lsco $VIEW
+	done
+    fi
+elif [ "$1" = "mkview" ] ; then
+    shift
+# script to remember the magic for creating a view 
+    if [ -n $1 ] ; then
+	VIEWTAG=$1
+
+	if ! echo $VIEWTAG | grep $USER > /dev/null  ; then
+	    echo "You should really have your user name in your view name "
+	    echo "so that it is obvious who owns it."
+	    exit 1
+	elif echo $VIEWTAG | grep " " > /dev/null; then
+	    echo "Spaces are not allowed in view names"
+	elif [ ! -d $WORKSPACE ] ; then
+	    echo "You do not appear to have your $WORKSPACE directory enabled."
+	    echo "Send an email to software-tools-req@cisco.com to request it."
+	fi
+	
+	STG_LOC_ROOT=$WORKSPACE/view_storage
+
+	if [ ! -d $STG_LOC_ROOT ] ; then
+	    if ! mkdir $STG_LOC_ROOT ; then
+		echo "Error making $STG_LOC_ROOT $?"
+		exit 1
+	    fi
+	fi
+
+	STG_LOC=$STG_LOC_ROOT/${1}_stg
+	cleartool mkview -tag $VIEWTAG -host ccbu-bxb-view1 -hpath $STG_LOC -gpath $STG_LOC $STG_LOC
+
+	# this is for if we write a way to tell the script where the config spec is
+	# it can automagically set it.
+	if [ $VP ]; then
+	    wget -O /tmp/tmp_config_spec http://ccbu-rel-eng/unix_cs/${VP}
+	    cd /view/${VIEWTAG}
+	    cleartool setcs /tmp/tmp_config_spec
+	    rm /tmp/tmp_config_spec
+	fi
+    else
+	echo "missing argument: view name to create"
+    fi
+
+elif  [ "$1" = "getcs" ] ; then
+    shift
+    if [ ! -n "$1" ] ; then
+	echo "Usage: `basename $0` vob/branch"
+	exit 1
+    fi
+
+    BRANCH="${1#*/}"
+    wget -O "${BRANCH}_.configspec" http://ccbu-rel-eng/config_spec/$1/unix/output.txt
+elif [ "$1" = "fsimport" ] ; then
+    shift
+    if [ ! -n "$1" ] || [ ! -n "$2" ] ; then
+	echo "Usage: `basename $0` <directory_to_import> <destination_parent_directory>"
+	exit 1
+    fi
+    
+    if [ ! -d "$1" ] ; then
+	echo "$1 is not a directory"
+	exit 1
+    elif [ ! -d "$2" ] ; then
+	echo "$2 is not a directory"
+	exit 1
+    fi
+
+    echo "importing directory '$1' to '$2' with:"
+    echo "clearfsimport -nsetevent -recurse -preview '$1' '$2'"
+    clearfsimport -nsetevent -recurse -preview "$1" "$2"
+    echo ""
+    echo "That was the preview... Press Ctrl-C to abort, Enter to do it for real"
+    read 
+    echo "clearfsimport -nsetevent -recurse '$1' '$2'"
+    echo "Setting imported directory permissions correctly"
+    chmod -R ug+rw "$1"
+    echo "You can still back out at this point, are you sure?"
+    echo "Press Ctrl-C to abort, Enter to continue"
+    read 
+    clearfsimport -nsetevent -recurse "$1" "$2"
+elif [ "$1" = "clean" ] ; then
+    # clean copyarea db files from all target directories we can find
+    for TARGET in $(find . -type d -name target | grep -v 3rdparty) ; do
+	echo "Cleaning .copyarea.db out of $TARGET"
+	find $TARGET -name .copyarea.db -exec rm {} \;
+    done
+else
+    echo "Excuse me? I didn't quite get that."
+fi

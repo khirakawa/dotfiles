@@ -1,0 +1,9 @@
+#!/bin/bash
+
+find $1 -type d -maxdepth 1 | while read dir; do
+	total=$(find $dir | grep -v .copyarea.db | grep -v .DS_Store |  wc -l)
+	empty=$(find $dir -type d -empty | wc -l)
+	symlinks=$(find $dir -type l | wc -l)
+	echo $dir $total $empty $symlinks
+done
+

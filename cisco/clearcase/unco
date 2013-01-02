@@ -1,0 +1,9 @@
+source cc_variables
+rcleartool unco -ser $CC_SERVER -username $CC_USERNAME -keep $@
+
+#Delete all keep files.  Don't need them
+echo "Removing all keep files"
+for FILE in "$@"
+do
+	rm $FILE.keep*
+done

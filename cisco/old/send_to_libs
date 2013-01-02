@@ -1,0 +1,37 @@
+#!/bin/bash
+
+IP=10.86.140.7
+
+function send_to_mmca {
+	echo "SCP to MMCA LIB"
+	scp target/*.jar root@$IP:/opt/cisco/mmca/lib/
+	#restart "SocialMiner Runtime"
+}
+
+function send_to_tomcat {
+	echo "SCP to TOMCAT LIB"
+	scp target/*.jar root@$IP:/usr/local/thirdparty/jakarta-tomcat/webapps/ccp-webapp/WEB-INF/lib
+	#restart "Cisco Tomcat"
+}
+
+#This doesn't quite work yet
+function restart {
+	read -p "Restart? [y]" -n 1
+	if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+		echo "Done"
+		exit 1
+	else
+		ssh -t root@$IP "bash -l -c 'controlcenter.sh $1 restart'"
+	fi
+}
+
+if [ "$1" == "mmca" ]; then
+	send_to_mmca
+elif [ "$1" == "tomcat" ]; then
+	send_to_tomcat
+else
+	send_to_mmca
+	send_to_tomcat
+fi
+
+

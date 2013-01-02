@@ -1,0 +1,2 @@
+source cc_variables
+rcleartool lsco -ser $CC_SERVER -username $CC_USERNAME 

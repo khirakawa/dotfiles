@@ -1,0 +1,2 @@
+source cc_variables
+rcleartool ci -ser $CC_SERVER -username $CC_USERNAME -c "$1" ${@:2:$#}

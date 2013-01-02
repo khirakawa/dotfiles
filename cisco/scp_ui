@@ -1,0 +1,9 @@
+target=10.86.135.205
+
+if [ $# -eq 1 ]; then
+    target=$1
+fi
+
+echo "scp'ing ui to $target"
+
+scp -P 3022 -r ~/work/webconfig/cceadmin/src/main/webapp/* boston@$target:/cygdrive/c/icm/tomcat/webapps/cceadmin

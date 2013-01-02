@@ -1,0 +1,1 @@
+ps ax | grep "$1" - | cut -f1 -d " " | grep -v "^$"

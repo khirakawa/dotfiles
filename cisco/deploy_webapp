@@ -1,0 +1,15 @@
+
+cd ~/work/webconfig/unifiedconfig-api
+build_me
+cd ../unifiedconfig-webapp
+build_me
+
+target=10.86.135.205
+
+if [ $# -eq 1 ]; then
+    target=$1
+fi
+
+echo "deploying to $target"
+
+../unifiedconfig-functional-tests/test-server/src/main/resources/scripts/copywar.sh $target
