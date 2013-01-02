@@ -5,7 +5,11 @@ export ZSH=$HOME/.dotfiles
 export PROJECTS=~/Code
 
 # source every .zsh file in this rep
-for config_file ($ZSH/**/*.zsh) source $config_file
+for config_file ($ZSH/**/*.zsh) do
+	if [[ $config_file != $ZSH/**/completion.zsh ]] then
+		source $config_file
+	fi
+done
 
 # use .localrc for SUPER SECRET CRAP that you don't
 # want in your public, versioned repo.
