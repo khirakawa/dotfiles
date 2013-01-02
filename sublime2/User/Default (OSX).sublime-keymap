@@ -1,2 +1,4 @@
 [
+        { "keys": ["shift+enter"], "command": "run_macro_file", "args": {"file": "Packages/Default/Add Line.sublime-macro"} },
+        { "keys": ["ctrl+k"], "command": "run_macro_file", "args": {"file": "Packages/Default/Delete Line.sublime-macro"} }
 ]
