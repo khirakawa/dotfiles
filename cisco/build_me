@@ -2,4 +2,4 @@ path=$(pwd)
 cd ~/work/webconfig
 source ./mvnenv.sh
 cd $path
-mvn -U -DskipTests clean install
+mvn -U -DskipTests -PnoOptimize clean install

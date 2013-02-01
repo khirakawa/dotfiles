@@ -12,4 +12,4 @@ fi
 
 echo "deploying to $target"
 
-../unifiedconfig-functional-tests/test-server/src/main/resources/scripts/copywar.sh $target
+~/work/testautomation/scripts/copywar.sh $target

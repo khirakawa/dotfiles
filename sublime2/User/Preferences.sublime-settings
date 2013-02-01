@@ -1,5 +1,10 @@
 {
 	"color_scheme": "Packages/Color Scheme - Default/Tomorrow.tmTheme",
 	"font_size": 11.0,
-	"theme": "Nexus.sublime-theme"
+	"ignored_packages":
+	[
+		"Vintage"
+	],
+	"theme": "Nexus.sublime-theme",
+	"trim_trailing_white_space_on_save": true
 }

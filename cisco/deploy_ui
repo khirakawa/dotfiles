@@ -9,4 +9,4 @@ fi
 
 echo "deplying to $target"
 
-../unifiedconfig-functional-tests/test-server/src/main/resources/scripts/copyui.sh $target
+~/work/testautomation/scripts/copyui.sh $target
