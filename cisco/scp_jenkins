@@ -1,4 +1,4 @@
-item="unifiedconfig-functional-tests/test-server/target/berlin-test-server-9.0.1-SNAPSHOT-test-server.zip"
+item="unifiedconfig-functional-tests/test-server/target/berlin-test-server-10.0.1-SNAPSHOT-test-server.zip"
 target=10.86.135.205
 
 if [ $# -eq 1 ]; then

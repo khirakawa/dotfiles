@@ -1,0 +1,1 @@
+alias "ij=open -a /Applications/IntelliJ\ IDEA\ 12\ CE.app"
