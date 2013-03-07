@@ -1,0 +1,5 @@
+{
+    "cmd": ["/usr/local/bin/lessc", "-x", "$file", "$file_path/../css/$file_base_name.css"],
+  	"path": "/usr/local/bin",
+		"selector": "source.css.less"
+}
