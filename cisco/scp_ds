@@ -1,0 +1,5 @@
+target=10.86.135.205
+
+echo "scp'ing $1 to DS: $target:/cygdrive/c/$2"
+
+scp -P 3022 -r $1 boston@$target:/cygdrive/c/$2
