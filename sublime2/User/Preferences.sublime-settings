@@ -1,10 +1,19 @@
 {
 	"color_scheme": "Packages/Color Scheme - Default/Tomorrow.tmTheme",
+	"folder_exclude_patterns":
+	[
+		".svn",
+		".git",
+		".hg",
+		"CVS",
+		"target"
+	],
 	"font_size": 11.0,
 	"ignored_packages":
 	[
 		"Vintage"
 	],
+	"tab_size": 2,
 	"theme": "Nexus.sublime-theme",
 	"trim_trailing_white_space_on_save": true
 }
