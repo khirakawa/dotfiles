@@ -18,6 +18,7 @@
         rank-contributers = !$ZSH/bin/git-rank-contributers
         count   = !git shortlog -sn
         lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+        dt = !git difftool -d $1
 [color]
         diff = auto
         status = auto
@@ -28,12 +29,17 @@
         editor = vim
 [apply]
         whitespace = nowarn
-[mergetool]
-        keepBackup = false
-[difftool]
-        prompt = false
 [help]
         autocorrect = 1
+[difftool]
+        prompt = false
+[mergetool]
+        keepBackup = false
+[merge]
+        tool = kdiff3
+[diff]
+        tool = kdiff3
+
 [difftool "sourcetree"]
 	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
 	path = 
