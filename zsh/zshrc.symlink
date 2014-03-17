@@ -29,3 +29,6 @@ PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
 unsetopt nomatch
 ### Added by the Heroku Toolbelt
 export PATH="/usr/local/heroku/bin:$PATH"
+
+export RBENV_ROOT=/usr/local/var/rbenv
+eval "$(rbenv init -)"
