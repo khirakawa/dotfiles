@@ -1,0 +1,50 @@
+#!/bin/sh
+#
+# Opens the github page for a repo/branch in your browser.
+#
+# gh [branch to compare current branch to]
+
+git rev-parse 2>/dev/null
+
+if [[ $? != 0 ]]
+then
+    echo "Not a git repository."
+    exit 1
+fi
+
+remote="origin"
+
+remote_url="remote.${remote}.url"
+
+giturl=$(git config --get $remote_url)
+if [ -z "$giturl" ]
+then
+    echo "$remote_url not set."
+    exit 1
+fi
+
+giturl=${giturl/git\@github\.com\:/https://github.com/}
+giturl=${giturl%\.git}
+
+if [[ $giturl == git@* ]]
+then
+	giturl="${giturl//://}"
+	giturl="${giturl/git@/http://}"
+fi
+
+current_branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
+
+if [ -z "$1" ]
+then
+	compare_branch="features/ps4/develop"
+else
+    compare_branch="$1"
+fi
+
+giturl="${giturl}/compare/${compare_branch}...${current_branch}?expand=1"
+
+# https://github.snei.sony.com/SNEI/Swordfish/compare/features/ps4/develop...dev/ken/defect/wrapBug?expand=1
+
+
+open $giturl
+exit 0
