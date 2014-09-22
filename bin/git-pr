@@ -36,7 +36,7 @@ current_branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
 
 if [ -z "$1" ]
 then
-	compare_branch="features/ps4/develop"
+	compare_branch="develop"
 else
     compare_branch="$1"
 fi

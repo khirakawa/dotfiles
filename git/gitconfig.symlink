@@ -6,7 +6,7 @@
         protocol = https
 [user]
 	name = khirakawa
-	email = k.hirakawa88@gmail.com
+	email = ken.hirakawa@am.sony.com
 [push]
         default = upstream
 [credential]
@@ -27,6 +27,7 @@
 [core]
 	excludesfile = /Users/khirakawa/.gitignore
         editor = vim
+	autocrlf = input
 [apply]
         whitespace = nowarn
 [help]
